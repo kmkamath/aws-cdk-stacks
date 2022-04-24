@@ -1,0 +1,6 @@
+{
+  "versionReporting": false,
+  "app": "npx ts-node --prefer-ts-exts bin/main.ts",
+  "context": {
+  }
+}
