@@ -6,16 +6,16 @@ AWS breaks down its services and tools here https://docs.aws.amazon.com/. The re
 The full list of stacks with AWS resources used in each:
 * Access Management (IAM)
 * Domain Management (Route53, SES, Certificate Manager)
-* Static Site (CloufFront, S3 and Route53 Alias Record)
-* User Management (Cognito, Lambda)
+* Static Site (CloudFront, S3 and Route53 Alias Record)
+* User Management (Cognito, API Gateway JWT Authorizer, Lambdas)
 
-All stacks have coupling between them. However, breaking down prevents a monolithic implementation, and promotes resuability. Specifically, we can have Applications can pick and choose the CDK stacks that are releveant to them to stand-up their application.
+All stacks have coupling between them. However, breaking down prevents a monolithic implementation, and promotes reusability. Specifically, we can have Applications can pick and choose the CDK stacks that are relevant to them to stand-up their application.
 
-Finally, some stacks like Access and Domain Management also have coupling across environments to allow for simple and secure software development lifeccyles.
+Finally, some stacks like Access and Domain Management also have coupling across environments to allow for simple and secure software development lifecycle.
 
 ## One-time Manual Steps
-1. Rooit user creates a `xxx-dev` account, and `xxx-prod` account under single organization.
-2. Roout user creates admin user with programmatic access in each account, and saves credentials as `dev-admin` and `prod-admin` AWS profiles.
+1. Root user creates a `xxx-dev` account, and `xxx-prod` account under single organization.
+2. Root user creates admin user with programmatic access in each account, and saves credentials as `dev-admin` and `prod-admin` AWS profiles.
 3. Root user bootstraps each of the accounts, and each of the regions by running these commands:
     ```
     CDK_NEW_BOOTSTRAP=1 npx cdk bootstrap --profile dev-admin aws://{dev-account-id}/{region}
@@ -85,4 +85,4 @@ ENV=Production npx cdk deploy --profile prod UserManagement
 ```
 
 ## Contributing
-Community contributions and pull requests are welcomed, but beware of zero automations and testing. So please test manually and run linter. Also, always scrub the `/cfg` folder files before committing. The secrets in there need to be moved to AWS secrets manager.
+Community contributions and pull requests are welcomed, but beware of zero automation's and testing. So please test manually and run linter. Also, always scrub the `/cfg` folder files before committing. The secrets in there need to be moved to AWS secrets manager.
