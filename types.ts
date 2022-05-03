@@ -1,3 +1,4 @@
+import { Attribute } from "aws-cdk-lib/aws-dynamodb"
 import { HttpMethod } from "aws-cdk-lib/aws-events"
 import { MxRecordValue } from "aws-cdk-lib/aws-route53"
 
@@ -46,7 +47,7 @@ export interface UserManagementConfigs {
   routes: {
     path: string,
     method: HttpMethod,
-    handlerFnfile: string,
+    handlerFnFile: string,
     handlerFnName: string,
     isAuthorize: boolean,
   }[],

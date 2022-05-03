@@ -49,7 +49,7 @@ export class UserManagementStack extends Stack {
     const domainName = env == 'Production' ? parentDomain : `${subdomain}.${parentDomain}`
     const bundling = {
       minify: true,
-      nodeModules: ['@aws-sdk/client-lambda', '@aws-sdk/client-cognito-identity-provider'],
+      nodeModules: ['@aws-sdk/client-cognito-identity-provider'],
       ...(env == 'Production'
         ? {}
         : {
@@ -125,9 +125,9 @@ export class UserManagementStack extends Stack {
     // api gateway with users routes
     const httpApi: IHttpApi = HttpApi.fromHttpApiAttributes(this, 'HttpApi', { httpApiId })
     routes.forEach((route) => {
-      const { method, path, handlerFnfile, handlerFnName, isAuthorize } = route
+      const { method, path, handlerFnFile, handlerFnName, isAuthorize } = route
       const lambdaFn = new NodejsFunction(this, `${handlerFnName}Fn`, {
-        entry: join(__dirname, handlerFnfile),
+        entry: join(__dirname, handlerFnFile),
         handler: handlerFnName,
         logRetention: RetentionDays.ONE_DAY,
         environment: {

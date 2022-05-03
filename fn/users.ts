@@ -42,7 +42,7 @@ function generateErrorResponse(message: string, statusCode?: number, error?: unk
   const env = process.env.ENV
   if (error) console.log(error)
   statusCode =
-    statusCode ?? (error instanceof CognitoIdentityProviderServiceException && error['$fault'] == 'client' ? 400 : 500)
+    statusCode ?? (error instanceof CognitoIdentityProviderServiceException && error['$fault'] == 'server' ? 500 : 400)
   return {
     statusCode,
     headers: { 'Content-Type': 'application/json' },
@@ -125,7 +125,6 @@ export const createUser: APIGatewayProxyHandlerV2 = async (event: APIGatewayProx
         { Name: 'custom:isAdmin', Value: isAdmin ? 'true' : 'false' },
       ],
     }
-    console.log(input)
     const data: SignUpCommandOutput = await client.send(new SignUpCommand(input))
     return generateSuccessResponse({ message: 'Registered user' }, 201, data)
   } catch (error: unknown) {
@@ -135,7 +134,6 @@ export const createUser: APIGatewayProxyHandlerV2 = async (event: APIGatewayProx
 
 export const updateUser: APIGatewayProxyHandlerV2 = async (event: APIGatewayProxyEventV2) => {
   try {
-    console.log('Event', JSON.stringify(event))
     // Validate
     if (!event['pathParameters'] || !event['pathParameters']['id'])
       throw new Error('Provide verified email address in path parameter')
@@ -163,7 +161,6 @@ export const updateUser: APIGatewayProxyHandlerV2 = async (event: APIGatewayProx
         { Name: 'custom:isAdmin', Value: isAdmin ? 'true' : 'false' },
       ],
     }
-    console.log(input)
     const data: AdminUpdateUserAttributesCommandOutput = await client.send(new AdminUpdateUserAttributesCommand(input))
     return generateSuccessResponse({ message: 'Updated user' }, 200, data)
   } catch (error: unknown) {
