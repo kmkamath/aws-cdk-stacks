@@ -3,6 +3,7 @@ import { App } from 'aws-cdk-lib'
 import { configs } from '../cfg/configs'
 import { AccessManagementStack } from '../lib/AccessManagementStack'
 import { DomainManagementStack } from '../lib/DomainManagementStack'
+import { ResourceManagementStack } from '../lib/ResouceManagementStack'
 import { StaticSiteStack } from '../lib/StaticSiteStack'
 import { UserManagementStack } from '../lib/UserManagementStack'
 import {
@@ -11,6 +12,7 @@ import {
   Environments,
   UserManagementConfigs,
   StaticSiteConfigs,
+  ResourceManagementConfigs,
 } from '../types'
 
 const app = new App()
@@ -42,6 +44,13 @@ if ('DomainManagement' in configs['Stacks']) {
 if ('UserManagement' in configs['Stacks']) {
   const userManagementCfg: UserManagementConfigs = configs['Stacks']['UserManagement'] as UserManagementConfigs
   new UserManagementStack(app, 'UserManagement', { env, tags, appCfg: userManagementCfg })
+}
+
+if ('ResourceManagement' in configs['Stacks']) {
+  const resourceManagementCfg: ResourceManagementConfigs = configs['Stacks'][
+    'ResourceManagement'
+  ] as ResourceManagementConfigs
+  new ResourceManagementStack(app, 'ResourceManagement', { env, tags, appCfg: resourceManagementCfg })
 }
 
 if ('StaticSite' in configs['Stacks']) {

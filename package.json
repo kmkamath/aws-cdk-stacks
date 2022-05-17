@@ -26,12 +26,14 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@types/aws-lambda": "^8.10.93",
     "@aws-cdk/aws-apigatewayv2-alpha": "2.20.0-alpha.0",
     "@aws-cdk/aws-apigatewayv2-authorizers-alpha": "^2.20.0-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "2.20.0-alpha.0",
     "@aws-sdk/client-cognito-identity-provider": "^3.54.0",
-    "@aws-sdk/client-lambda": "^3.54.0",
-    "aws-cdk-lib": "^2.20.0"
+    "@aws-sdk/client-dynamodb": "^3.54.0",
+    "@aws-sdk/lib-dynamodb": "^3.82.0",
+    "@types/aws-lambda": "^8.10.93",
+    "aws-cdk-lib": "^2.20.0",
+    "uuid": "^8.3.2"
   }
 }

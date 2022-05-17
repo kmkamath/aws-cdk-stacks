@@ -33,14 +33,13 @@ Install `node` and `aws`, and run `npx cdk <command>`.
 The environment is passed as `ENV` variable, and the user as `--profile` parameter. Please refer to CDK docs for more details.
 
 ## Access management stack
-Creates roles in `prod` account, and assigns these roles to users that it creates in `dev` account.
+Creates roles in `prod` account, and assigns these roles to users that it creates in `dev` account. There is coupling across environments in this stack because the roles created in prod environment are assigned to the users configured for dev environment.
 ![AccessManagementDesign](./img/AccessManagementDesign.png)
-
 ```
 ENV=Production npx cdk deploy --profile prod-admin AccessManagement
 ENV=Development npx cdk deploy --profile dev-admin AccessManagement
 ```
-There is coupling across environments in this stack because the roles created in prod environment are assigned to the users configured for dev environment. The 
+The admin user deploys this stack. There are two types of users created for each username configured. A `*-cdk` user with programmatic write access with no UI access, and `*-console` user with read access only. This is to encourage all changes to infrastructure happen programmatically, and never using the console.
 
 Save the cdk users credential as `dev` and `prod` AWS profiles. Sample  `~/.aws/credentials` file:
 ```
@@ -83,6 +82,15 @@ Creates the infrastructure for user management using Cognito User pools, Lambda 
 ENV=Development npx cdk deploy --profile dev UserManagement
 ENV=Production npx cdk deploy --profile prod UserManagement
 ```
+
+## Resource management stack
+Creates the infrastructure for resource management using DynamoDB and Lambda functions to CRUD the resources.
+![ResourceManagementDesign](./img/ResourceManagementDesign.png)
+```
+ENV=Development npx cdk deploy --profile dev ResourceManagement
+ENV=Production npx cdk deploy --profile prod ResourceManagement
+```
+All endpoints share 4 Lambda functions to CRUD resources into independently configurable DynamoDB tables.
 
 ## Contributing
 Community contributions and pull requests are welcomed, but beware of zero automation's and testing. So please test manually and run linter. Also, always scrub the `/cfg` folder files before committing. The secrets in there need to be moved to AWS secrets manager.

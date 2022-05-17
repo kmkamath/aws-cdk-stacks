@@ -1,10 +1,10 @@
-import { Attribute } from "aws-cdk-lib/aws-dynamodb"
 import { HttpMethod } from "aws-cdk-lib/aws-events"
 import { MxRecordValue } from "aws-cdk-lib/aws-route53"
+import { APIGatewayProxyEventV2 } from 'aws-lambda'
 
 // Stacks and Environments Supported
 export type Environments = 'Development' | 'Production'
-export type Stacks = 'AccessManagement' | 'DomainManagement' | 'UserManagement' | 'StaticSite'
+export type Stacks = 'AccessManagement' | 'DomainManagement' | 'ResourceManagement' | 'UserManagement' | 'StaticSite'
 
 // Environment Configuration Interface
 export type EnvironmentConfigs = {
@@ -60,6 +60,38 @@ export interface UserManagementConfigs {
   },
 }
 
+// ResourceManagement Configuration Interface
+export interface ResourceManagementConfigs {
+  resources: {
+    table: {
+      name: string,
+      partitionKey: { name: string, type: string },
+      sortKey?: { name: string, type: string },
+    },
+    routes: {
+      path: string,
+      method: HttpMethod,
+      handlerFnFile: string,
+      handlerFnName: string,
+      isAuthorize: boolean,
+      params: {
+        keys: {
+          name: string,
+          configuredIn?: keyof APIGatewayProxyEventV2,
+        }[],
+      },
+    }[],
+  }[],
+  environments: {
+    [env in Environments]: {
+      httpApiId: string,
+      httpAuthorizerId: string,
+      replicationRegions?: string[],
+      isDestroyable: boolean,
+    }
+  },
+}
+
 // StaticSite Configuration Interface
 export interface StaticSiteConfigs {
   parentDomain: string,
@@ -80,6 +112,6 @@ export interface Configs {
     [env in Environments]: EnvironmentConfigs
   },
   Stacks: {
-    [stack in Stacks]: AccessManagementConfigs | DomainManagementConfigs | UserManagementConfigs | StaticSiteConfigs
+    [stack in Stacks]: AccessManagementConfigs | DomainManagementConfigs | ResourceManagementConfigs | UserManagementConfigs | StaticSiteConfigs
   },
 }
